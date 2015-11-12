@@ -69,11 +69,11 @@
             }
 
             .title-bold {
-                font-weight: bold; 
+                font-weight: bold;
                 font-size: 44px;
             }
             .title-light {
-                font-weight: 300; 
+                font-weight: 300;
                 color: #555;
                 font-size: 44px;
             }
@@ -198,6 +198,9 @@ var playlistQueue = [];
 var savedQueue = [];
 
 var makingChanges = false;
+var textFile = null;
+
+var host = "http://localhost:8000"; // http://www.spotmybackup.com
 
 function refreshTrackData(callback) {
     if (!isExporting && !isImporting) {
@@ -213,7 +216,7 @@ function refreshTrackData(callback) {
                     callback();
                 });
             });
-        }); 
+        });
     }
 }
 
@@ -255,8 +258,8 @@ function login() {
     var top = (screen.height / 2) - (height / 2);
 
     var set = {
-      client_id: '[YOUR_CLIENT_TOKEN_HERE]',
-      redirect_uri: 'http://www.spotmybackup.com/login.html',
+      client_id: 'bcd360e1bd0949909b1553ceabe25697',
+      redirect_uri: host + '/login.html',
       scope: 'playlist-read playlist-read-private playlist-modify-public playlist-modify-private user-library-read user-library-modify',
       response_type: 'token',
       show_dialog: 'true'
@@ -269,7 +272,7 @@ function login() {
 }
 
 function authCallback(event){
-    if (event.origin !== "http://www.spotmybackup.com") {
+    if (event.origin !== host) {
         return;
     }
     if (authWindow) {
@@ -290,8 +293,14 @@ function urlEncodeSet(set) {
 }
 
 function download(filename, text) {
+    var data = new Blob([text], {type: 'text/plain'});
+    if (textFile !== null) {
+      window.URL.revokeObjectURL(textFile);
+    }
+    textFile = window.URL.createObjectURL(data);
+
     var pom = document.createElement('a');
-    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('href', textFile);
     pom.setAttribute('download', filename);
 
     if (document.createEvent) {
@@ -306,13 +315,13 @@ function download(filename, text) {
 
 function readFile(evt) {
     //Retrieve the first (and only!) File from the FileList object
-    var f = evt.target.files[0]; 
+    var f = evt.target.files[0];
 
     if (f) {
         $('#fileName').html(f.name);
 
         var r = new FileReader();
-        r.onload = function(e) { 
+        r.onload = function(e) {
             var json = e.target.result;
 
             importColl = JSON.parse(json);
@@ -324,7 +333,7 @@ function readFile(evt) {
             compareEverything();
         }
         r.readAsText(f);
-    } else { 
+    } else {
       alert("Failed to load file");
     }
 }
@@ -369,12 +378,12 @@ function compareEverything() {
         globalStep = "Uploading";
         if (typeof importColl !== 'undefined') {
 
-            playlistTotal = collPlaylistCount(importColl);            
+            playlistTotal = collPlaylistCount(importColl);
 
             // TONOTDO:compare starred -> can not really do that since there is no api to manipulate those
             // instead we just create a replacement-standard-list
             globalStep = "Comparing starred tracks";
-            
+
             makeSureImportedStarredExists(function (proceed) {
                 if (importColl.starred.length > 0) {
                     compareUriTracks(importColl.starred, collections.starred, addToStarred);
@@ -453,7 +462,7 @@ function makeSurePlaylistExists(name, callback) {
         headers: {
         'Authorization': 'Bearer ' + token
         },
-        success: function(response) {         
+        success: function(response) {
             // alert(JSON.stringify(response));
             collections.playlists[response.name] = {
                 name: response.name,
@@ -509,7 +518,7 @@ function handleSavedRequests(arr, callback) {
 function handlePlaylistRequests(arr, callback) {
     var url = arr.pop();
     if (url) {
-        trackStep += 1;   
+        trackStep += 1;
         $.ajax({
             method: "POST",
             url: url,
@@ -517,7 +526,7 @@ function handlePlaylistRequests(arr, callback) {
             headers: {
             'Authorization': 'Bearer ' + token
             },
-            success: function(response) {      
+            success: function(response) {
                 // collections.playlists[response.name] = {
                 //     id: response.id,
                 //     uri: response.uri
@@ -601,7 +610,7 @@ function handleAuth(accessToken) {
         headers: {
         'Authorization': 'Bearer ' + accessToken
         },
-        success: function(response) {         
+        success: function(response) {
             var user_id = response.id.toLowerCase();
             userId = user_id;
             name = user_id;
@@ -609,7 +618,7 @@ function handleAuth(accessToken) {
             $('#userName').html(name);
             $('#pnlLoggedOut').hide();
 
-            refreshTrackData(function () {                   
+            refreshTrackData(function () {
                 $('#pnlAction').show();
             });
         }
@@ -634,13 +643,13 @@ function loadStarred(url, arr, callback) {
         headers: {
             'Authorization': 'Bearer ' + token
         },
-        success: function(data) {         
+        success: function(data) {
             if (!data) return;
             if ('tracks' in data) {
                 loadTrackChunks(data.tracks.href, arr, callback);
             } else {
                 callback();
-            }                
+            }
         }
     });
 }

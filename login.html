@@ -3,19 +3,20 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<title>Login Window</title>
-		<script type='text/javascript'>//<![CDATA[ 
+		<script type='text/javascript'>//<![CDATA[
+			var host = "http://localhost:8000"; // http://www.spotmybackup.com
 			window.onload = function() {
 				var target = window.self === window.top ? window.opener : window.parent;
 				var hash = window.location.hash;
 				if (hash) {
 				    var token = window.location.hash.split('&')[0].split('=')[1];
-				    target.postMessage(token, 'http://www.spotmybackup.com'); //embedded
+				    target.postMessage(token, host); //embedded
 				}
 			}
 		</script>
 	</head>
 	<body>
-	  
+
 	</body>
 </html>
 

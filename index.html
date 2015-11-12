@@ -664,10 +664,10 @@ function loadTrackChunks(url, arr, callback) {
             if (!data) return;
             if ('items' in data) {
                 $.each(data.items, function (index, value) {
-                    arr.push({ id: value.track.id, uri: value.track.uri });
+                    arr.push({ id: value.track.id, uri: value.track.uri, name: value.track.name });
                 });
             } else {
-                arr.push({ id: data.track.id, uri: data.track.uri });
+                arr.push({ id: data.track.id, uri: data.track.uri, name: data.track.name });
             }
             if (data.next) {
                 loadTrackChunks(data.next, arr, callback);

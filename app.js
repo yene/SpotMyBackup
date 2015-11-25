@@ -20,6 +20,52 @@ var textFile = null;
 
 var host = "http://localhost:8000"; // http://www.spotmybackup.com
 
+// Communicate with the login window.
+window.onload = function() {
+    if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
+        // MSIE
+        $('#pnlLoggedOut').html('Please use Firefox or Chrome, due to a bug in Internet Explorer');
+    } else {
+        $('#login').click(login);
+        window.addEventListener("message", authCallback, false);
+        bindControls();
+        refreshProgress();
+    }
+}
+
+function authCallback(event){
+    if (event.origin !== host) {
+        return;
+    }
+    if (authWindow) {
+        authWindow.close();
+    }
+    handleAuth(event.data);
+}
+
+function handleAuth(accessToken) {
+    token = accessToken;
+    // Get Current User’s Profile
+    $.ajax({
+        url: 'https://api.spotify.com/v1/me',
+        headers: {
+        'Authorization': 'Bearer ' + accessToken
+        },
+        success: function(response) {
+            var user_id = response.id.toLowerCase();
+            userId = user_id;
+            name = user_id; // TODO: use display_name but check for null
+
+            $('#userName').html(name);
+            $('#pnlLoggedOut').hide();
+
+            refreshTrackData(function () {
+                $('#pnlAction').show();
+            });
+        }
+    });
+}
+
 function refreshTrackData(callback) {
     if (!isExporting && !isImporting) {
         isExporting = true;
@@ -89,15 +135,7 @@ function login() {
     );
 }
 
-function authCallback(event){
-    if (event.origin !== host) {
-        return;
-    }
-    if (authWindow) {
-        authWindow.close();
-    }
-    handleAuth(event.data);
-}
+
 
 function urlEncodeSet(set) {
     var comps = [];
@@ -420,28 +458,7 @@ function bindControls() {
     $('#fileImport').change(readFile);
 }
 
-function handleAuth(accessToken) {
-    token = accessToken;
-    // fetch my public playlists
-    $.ajax({
-        url: 'https://api.spotify.com/v1/me',
-        headers: {
-        'Authorization': 'Bearer ' + accessToken
-        },
-        success: function(response) {
-            var user_id = response.id.toLowerCase();
-            userId = user_id;
-            name = user_id;
 
-            $('#userName').html(name);
-            $('#pnlLoggedOut').hide();
-
-            refreshTrackData(function () {
-                $('#pnlAction').show();
-            });
-        }
-    });
-}
 
 function refreshMyMusicTracks(callback) {
     collections.saved = [];
@@ -560,14 +577,4 @@ function handlePlaylistTracks(arr, result, callback) {
     });
 }
 
-window.onload = function() {
-    if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
-        // MSIE
-        $('#pnlLoggedOut').html('Please use Firefox or Chrome, due to a bug in Internet Explorer');
-    } else {
-        $('#login').click(login);
-        window.addEventListener("message", authCallback, false);
-        bindControls();
-        refreshProgress();
-    }
-}
+

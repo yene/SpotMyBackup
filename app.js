@@ -451,9 +451,7 @@ function bindControls() {
     });
     $('#btnExport').click(function () {
         var json = JSON.stringify(collections);
-        var d = new Date();
-        var time = '@' + d.getFullYear() + '_' + (d.getMonth() + 1) + '_' + d.getDate();
-        download(name+time+'.json', json);
+        download('Spotify Backup ' + name + '.json', json);
     });
     $('#fileImport').change(readFile);
 }

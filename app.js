@@ -499,10 +499,29 @@ function loadTrackChunks(url, arr, callback) {
             if (!data) return;
             if ('items' in data) {
                 $.each(data.items, function (index, value) {
-                    arr.push({ id: value.track.id, uri: value.track.uri, name: value.track.name });
+                    var a = value.track.artists.map(function(arr) {
+                        return arr.name;
+                    })
+
+                    arr.push({
+                        id: value.track.id,
+                        uri: value.track.uri,
+                        name: value.track.name,
+                        album: value.track.album.name,
+                        artists: a
+                    });
                 });
             } else {
-                arr.push({ id: data.track.id, uri: data.track.uri, name: data.track.name });
+                var a = value.track.artists.map(function(arr) {
+                    return arr.name;
+                })
+                arr.push({
+                        id: value.track.id,
+                        uri: value.track.uri,
+                        name: value.track.name,
+                        album: value.track.album.name,
+                        artists: a
+                });
             }
             if (data.next) {
                 loadTrackChunks(data.next, arr, callback);

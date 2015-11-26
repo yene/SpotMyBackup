@@ -16,8 +16,13 @@ You can use it at www.spotmybackup.com or on your own webserver (see Q&A).
 * copy the client id to index.html
 * cd into folder and run `python -m SimpleHTTPServer`
 
+## Questions
+* Do saved tracks not appear as playlist? -> yes they are separate.
+* is the track order of a playlist exported correctly? -> yes
+
+## Notes
+* Songs without spotify id are usually local songs.
+
 ## Todo
-* backup song name, artist, album and song order
-* after generating the list put the blob link onto the download button
-* or just grab the rawdata
+* removed starred tracks, they are now just a playlist.
 * update jquery version

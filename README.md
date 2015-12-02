@@ -11,10 +11,11 @@ You can use it at http://spotify.yannickweiss.com/ or on your own webserver (see
 * [Spotify Web API](https://developer.spotify.com/web-api/endpoint-reference/)
 
 ## Setup
-* create new app https://developer.spotify.com/my-applications
-* add your redirect URL in the settings "http://xxxx/login.html"
-* copy the client id to index.html
-* cd into folder and run `python -m SimpleHTTPServer`
+* Create new app https://developer.spotify.com/my-applications
+* Add your redirect URL in the settings "http://xxxx/login.html"
+* If you get `INVALID_CLIENT: Invalid redirect URI` see previous step.
+* Copy the client id to index.html
+* `cd` into folder and run `python -m SimpleHTTPServer`
 
 ## Questions
 * Do saved tracks not appear as playlist? -> yes they are separate.

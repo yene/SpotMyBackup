@@ -18,7 +18,7 @@ var savedQueue = [];
 var makingChanges = false;
 var textFile = null;
 
-var host = "http://localhost:8000"; // http://www.spotmybackup.com
+var host = window.location.origin;
 
 // Communicate with the login window.
 window.onload = function() {
@@ -75,7 +75,7 @@ function refreshTrackData(callback) {
         refreshPlaylist(function () {
             refreshMyMusicTracks(function () {
                 refreshStarredTracks(function () {
-                    $('#loadingTitle').html('Finished loading, you now might want to export or import.');
+                    $('#loadingTitle').html('Finished loading, you now might want to export.');
                     isExporting = false;
                     callback();
                 });
@@ -447,7 +447,6 @@ function compareIdTracks(imported, stored, addCallback) {
 function bindControls() {
     $('#btnImport').click(function () {
         $('#pnlAction').hide();
-        $('#pnlImport').show();
     });
     $('#btnExport').click(function () {
         var json = JSON.stringify(collections);

@@ -26,3 +26,5 @@ You can use it at www.spotmybackup.com or on your own webserver (see Q&A).
 ## Todo
 * removed starred tracks, they are now just a playlist.
 * update jquery version
+* test import
+* lint code

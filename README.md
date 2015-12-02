@@ -31,3 +31,4 @@ You can use it at http://spotify.yannickweiss.com/ or on your own webserver (see
 * lint code
 * give credit to first version "based on ..."
 * Add security information that login information are not sent to any server, link to app.js.
+* Handle when people deny access. http://.../login.html?error=access_denied 

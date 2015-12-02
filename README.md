@@ -5,7 +5,7 @@ This javascript based app allows you to backup all your playlists and import the
 
 In consequence, no credentials or data is stored or processed on the Webserver itself.
 
-You can use it at www.spotmybackup.com or on your own webserver (see Q&A).
+You can use it at http://spotify.yannickweiss.com/ or on your own webserver (see Setup).
 
 ## Documentation
 * [Spotify Web API](https://developer.spotify.com/web-api/endpoint-reference/)
@@ -25,6 +25,8 @@ You can use it at www.spotmybackup.com or on your own webserver (see Q&A).
 
 ## Todo
 * removed starred tracks, they are now just a playlist.
-* update jquery version
+* Update jquery version and remove dependency.
 * test import
 * lint code
+* give credit to first version "based on ..."
+* Add security information that login information are not sent to any server, link to app.js.

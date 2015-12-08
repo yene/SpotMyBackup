@@ -124,7 +124,7 @@ function login() {
     var set = {
       client_id: 'bcd360e1bd0949909b1553ceabe25697',
       redirect_uri: host + '/login.html',
-      scope: 'playlist-read playlist-read-private  user-library-read',
+      scope: 'playlist-read playlist-read-private user-library-read',
       response_type: 'token',
       show_dialog: 'true'
     };

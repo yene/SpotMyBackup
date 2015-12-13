@@ -29,7 +29,6 @@ window.onload = function() {
         $('#login').click(login);
         window.addEventListener("message", authCallback, false);
         bindControls();
-        refreshProgress();
     }
 }
 
@@ -41,6 +40,7 @@ function authCallback(event){
         authWindow.close();
     }
     handleAuth(event.data);
+    refreshProgress();
 }
 
 function handleAuth(accessToken) {
@@ -200,7 +200,12 @@ function collectionProperties(coll) {
 
 function collTrackCount(coll) {
     var count = 0;
-    var keys = _.keys(coll.playlists);
+
+    if (!coll.playlists) {
+        return count;
+    }
+
+    var keys = Object.keys(coll.playlists);
     $.each(keys, function (index, value) {
         count += coll.playlists[value].tracks.length;
     });
@@ -214,7 +219,10 @@ function collTrackCount(coll) {
 }
 
 function collPlaylistCount(coll) {
-    var keys = _.keys(coll.playlists);
+    if (!coll.playlists) {
+        return 0;
+    }
+    var keys = Object.keys(coll.playlists);
     var count = keys.length + 1;
     if (!("importedStarred" in keys)) {
         count++;
@@ -250,7 +258,7 @@ function compareEverything() {
                 playlistStep += 1;
 
                 // compare other playlists
-                var playlistNames = _.keys(importColl.playlists);
+                var playlistNames = Object.keys(importColl.playlists);
                 globalStep = "Comparing custom playlists";
                 handlePlaylistCompare(playlistNames, function () {
                     handleTrackUpload();
